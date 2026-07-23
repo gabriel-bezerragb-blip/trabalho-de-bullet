@@ -1,5 +1,3 @@
-// Só criação de elementos HTML e formatação visual.
-
 function formatarMoeda(valor) {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
 }
@@ -23,10 +21,10 @@ function atualizarPainelSaldo(totais, limiteMensal) {
 
 function atualizarBarraOrcamento(totalDespesas, limiteMensal) {
     const porcentagemUso = Math.min((totalDespesas / limiteMensal) * 100, 100);
-    
+
     document.getElementById('textoOrcamento').textContent = `${formatarMoeda(totalDespesas)} de ${formatarMoeda(limiteMensal)}`;
     document.getElementById('porcentagemOrcamento').textContent = `${porcentagemUso.toFixed(0)}%`;
-    
+
     const barraFill = document.getElementById('barraOrcamento');
     barraFill.style.width = `${porcentagemUso}%`;
 
@@ -39,20 +37,19 @@ function atualizarBarraOrcamento(totalDespesas, limiteMensal) {
 
 function renderizarCategorias(categorias) {
     const container = document.getElementById('listaCategorias');
-    
+
     if (categorias.length === 0) {
         container.innerHTML = '<p class="text-muted" style="text-align:center; padding: 10px 0;">Sem gastos registrados.</p>';
         return;
     }
 
-    // Define o espaçamento superior exatamente igual ao gap do card de orçamento (5px)
     container.style.marginTop = '5px';
 
     container.innerHTML = categorias.map((cat, index) => {
         const corCategoria = obterCorCategoria(cat.nome);
         const isUltimo = index === categorias.length - 1;
         const marginBottom = isUltimo ? '0' : '18px';
-        
+
         return `
         <div style="margin-bottom: ${marginBottom};">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 14px;">
@@ -73,18 +70,18 @@ function renderizarCategorias(categorias) {
     }).join('');
 }
 
-// Função auxiliar para mapear as cores das categorias
 function obterCorCategoria(categoria) {
     const cores = {
-        'Renda': '#34c759',        // Verde
-        'Moradia': '#007aff',      // Azul
-        'Alimentação': '#ff9500',  // Laranja
-        'Transporte': '#5856d6',   // Roxo
-        'Saúde': '#ff3b30',        // Vermelho
-        'Lazer': '#ff2d55',        // Rosa
-        'Educação': '#5ac8fa',     // Azul claro
-        'Outros': '#8e8e93'        // Cinza
+        'Renda': '#34c759',
+        'Moradia': '#007aff',
+        'Alimentação': '#ff9500',
+        'Transporte': '#5856d6',
+        'Saúde': '#ff3b30',
+        'Lazer': '#ff2d55',
+        'Educação': '#5ac8fa',
+        'Outros': '#8e8e93'
     };
+
     return cores[categoria] || '#8e8e93';
 }
 
@@ -98,21 +95,18 @@ function renderizarHistorico(transacoes) {
     }
 
     lista.innerHTML = transacoes.map(t => {
-        const formatarData = t.data.split('-').reverse().join('/'); 
+        const formatarData = t.data.split('-').reverse().join('/');
         const isReceita = t.tipo === 'receita';
         const corBase = obterCorCategoria(t.categoria);
-        
-        // Adicionamos '25' ao final do HEX para criar 15% de transparência no fundo
-        const corFundoTransparente = corBase + '25'; 
-        
+        const corFundoTransparente = corBase + '25';
+
         return `
         <div class="item-transacao">
             <div class="item-info">
-                <!-- Ícone circular colorido -->
                 <div class="item-icone" style="background-color: ${corFundoTransparente};">
                     <div class="icone-ponto" style="background-color: ${corBase};"></div>
                 </div>
-                
+
                 <div class="item-text" style="text-align: left;">
                     <h4>${t.descricao}</h4>
                     <p>${t.categoria} · ${formatarData}</p>
@@ -130,5 +124,6 @@ function renderizarHistorico(transacoes) {
                 </button>
             </div>
         </div>
-    `}).join('');
+        `;
+    }).join('');
 }
